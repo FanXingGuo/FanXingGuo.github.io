@@ -1,0 +1,22 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>所有文章 - 兴国的夏天</title>
+    <link>http://fanxingguo.top/posts/</link>
+    <description>所有文章 | 兴国的夏天</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Sun, 15 May 2022 08:47:11 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/posts/" rel="self" type="application/rss+xml" /><item>
+  <title>手写数据识别</title>
+  <link>http://fanxingguo.top/handwriten/</link>
+  <pubDate>Sun, 15 May 2022 08:47:11 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/handwriten/</guid>
+  <description><![CDATA[1 2 3 4 import numpy as np import pandas as pd import matplotlib.pyplot as plt from scipy.io import loadmat 1 2 data = loadmat(&#39;ex3data1.mat&#39;) data {'__header__': b'MATLAB 5.0 MAT-file, Platform: GLNXA64, Created on: Sun Oct 16 13:09:09 2011', '__version__': '1.0', '__globals__': [], 'X': array([[0., 0., 0., ..., 0., 0., 0.], [0., 0., 0., ..., 0., 0., 0.], [0., 0., 0., ..., 0., 0., 0.], ..., [0., 0., 0., ...,]]></description>
+</item><item>
+  <title>线性回归</title>
+  <link>http://fanxingguo.top/my-first-post/</link>
+  <pubDate>Sun, 15 May 2022 08:33:26 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/my-first-post/</guid>
+  <description><![CDATA[下面，我们将梯度下降解决一个线性回归问题。 关键词：numpy、梯度、归一化 PS：如果不清楚关键词内容，请自学关键词相关内容再阅读 1 2 3 4 5 6]]></description>
+</item></channel>
+</rss>

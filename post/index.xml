@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on 兴国的夏天</title>
+    <link>http://fanxingguo.top/post/</link>
+    <description>Recent content in Posts on 兴国的夏天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
+    <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster>
+    <lastBuildDate>Sun, 15 May 2022 08:33:26 +0800</lastBuildDate><atom:link href="http://fanxingguo.top/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>线性回归</title>
+      <link>http://fanxingguo.top/post/my-first-post/</link>
+      <pubDate>Sun, 15 May 2022 08:33:26 +0800</pubDate>
+      <author>study1997.fxg@hotmail.com (兴国)</author>
+      <guid>http://fanxingguo.top/post/my-first-post/</guid>
+      <description>下面，我们将梯度下降解决一个线性回归问题。 关键词：numpy、梯度、归一化 PS：如果不清楚关键词内容，请自学关键词相关内容再阅读 首先，定义数</description>
+    </item>
+    
+  </channel>
+</rss>
