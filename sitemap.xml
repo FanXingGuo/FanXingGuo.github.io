@@ -2,14 +2,17 @@
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml"
   ><url>
-      <loc>http://fanxingguo.top/categories/</loc><lastmod>2022-05-17T17:48:18&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+      <loc>http://fanxingguo.top/categories/</loc><lastmod>2022-05-17T21:27:26&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+      <loc>http://fanxingguo.top/posts/</loc><lastmod>2022-05-17T21:27:26&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+      <loc>http://fanxingguo.top/tags/</loc><lastmod>2022-05-17T21:27:26&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+      <loc>http://fanxingguo.top/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</loc><lastmod>2022-05-17T21:27:26&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+      <loc>http://fanxingguo.top/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/</loc><lastmod>2022-05-17T21:27:26&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+      <loc>http://fanxingguo.top/tags/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/</loc><lastmod>2022-05-17T21:27:26&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+      <loc>http://fanxingguo.top/</loc><lastmod>2022-05-17T21:27:26&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+      <loc>http://fanxingguo.top/linermodel/</loc><lastmod>2022-05-17T21:27:26&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
       <loc>http://fanxingguo.top/tags/esp32cam/</loc><lastmod>2022-05-17T17:48:18&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
       <loc>http://fanxingguo.top/tags/micropython/</loc><lastmod>2022-05-17T17:48:18&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-      <loc>http://fanxingguo.top/posts/</loc><lastmod>2022-05-17T17:48:18&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-      <loc>http://fanxingguo.top/tags/</loc><lastmod>2022-05-17T17:48:18&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-      <loc>http://fanxingguo.top/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</loc><lastmod>2022-05-17T17:48:18&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
       <loc>http://fanxingguo.top/esp32cam%E5%B0%8F%E8%BD%A6%E4%BB%A3%E7%A0%81/</loc><lastmod>2022-05-17T17:48:18&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-      <loc>http://fanxingguo.top/</loc><lastmod>2022-05-17T17:48:18&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
       <loc>http://fanxingguo.top/handwriten/</loc><lastmod>2022-05-15T08:47:11&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
       <loc>http://fanxingguo.top/post/</loc><lastmod>2022-05-15T08:33:26&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
       <loc>http://fanxingguo.top/post/my-first-post/</loc><lastmod>2022-05-15T08:33:26&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>

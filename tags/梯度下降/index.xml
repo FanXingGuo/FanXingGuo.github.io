@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>梯度下降 - 标签 - 兴国的夏天</title>
+    <link>http://fanxingguo.top/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/</link>
+    <description>梯度下降 - 标签 - 兴国的夏天</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Tue, 17 May 2022 21:27:26 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/tags/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D/" rel="self" type="application/rss+xml" /><item>
+  <title>一个简单的线性回归例子</title>
+  <link>http://fanxingguo.top/linermodel/</link>
+  <pubDate>Tue, 17 May 2022 21:27:26 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/linermodel/</guid>
+  <description><![CDATA[<h3 id="一个简单的线性回归例子">一个简单的线性回归例子</h3>
+<p>下面，我们将梯度下降解决一个线性回归问题。</p>]]></description>
+</item></channel>
+</rss>
