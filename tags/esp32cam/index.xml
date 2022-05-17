@@ -1,0 +1,31 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>esp32cam - 标签 - 兴国的夏天</title>
+    <link>http://fanxingguo.top/tags/esp32cam/</link>
+    <description>esp32cam - 标签 - 兴国的夏天</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Tue, 17 May 2022 17:48:18 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/tags/esp32cam/" rel="self" type="application/rss+xml" /><item>
+  <title>使用esp32cam和micropython控制小车</title>
+  <link>http://fanxingguo.top/esp32cam%E5%B0%8F%E8%BD%A6%E4%BB%A3%E7%A0%81/</link>
+  <pubDate>Tue, 17 May 2022 17:48:18 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/esp32cam%E5%B0%8F%E8%BD%A6%E4%BB%A3%E7%A0%81/</guid>
+  <description><![CDATA[<h3 id="功能描述">功能描述</h3>
+<p>手机搜索WIFI，加入camera_1，密码，浏览器访问一下链接</p>
+<ul>
+<li>
+<p>192.168.4.1 查看实时拍照</p>
+</li>
+<li>
+<p>192.168.4.1/left  控制左转</p>
+</li>
+<li>
+<p>192.168.4.1/right  控制右转</p>
+</li>
+<li>
+<p>192.168.4.1/forward 控制直行</p>
+<p>单次运动时长为moveTime=0.05s，直行大约1.5cm。</p>
+</li>
+</ul>]]></description>
+</item></channel>
+</rss>
