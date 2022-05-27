@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <title>二元分类器性能的衡量 - 兴国的夏天</title><meta name="author" content="兴国: ">
+<meta name="description" content="介绍 混淆矩阵、精度和召回率、F1值、ROC曲线" />
+<meta name="keywords" content="ROC曲线,混淆矩阵,召回率,精度,F1分数" /><meta itemprop="name" content="二元分类器性能的衡量">
+<meta itemprop="description" content="介绍 混淆矩阵、精度和召回率、F1值、ROC曲线"><meta itemprop="datePublished" content="2022-05-27T18:46:55+08:00" />
+<meta itemprop="dateModified" content="2022-05-27T18:46:55+08:00" />
+<meta itemprop="wordCount" content="1943"><meta itemprop="image" content="http://fanxingguo.top/avatar.jpg"/>
+<meta itemprop="keywords" content="ROC曲线,混淆矩阵,召回率,精度,F1分数," /><meta property="og:title" content="二元分类器性能的衡量" />
+<meta property="og:description" content="介绍 混淆矩阵、精度和召回率、F1值、ROC曲线" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://fanxingguo.top/classificationperformancemeasures/" /><meta property="og:image" content="http://fanxingguo.top/avatar.jpg"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-27T18:46:55+08:00" />
+<meta property="article:modified_time" content="2022-05-27T18:46:55+08:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://fanxingguo.top/avatar.jpg"/>
+
+<meta name="twitter:title" content="二元分类器性能的衡量"/>
+<meta name="twitter:description" content="介绍 混淆矩阵、精度和召回率、F1值、ROC曲线"/>
+<meta name="application-name" content="xgBlog">
+<meta name="apple-mobile-web-app-title" content="xgBlog"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#252627"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://cdn.51dream.top/blog/icons8-%e9%a6%96%e9%a1%b5.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://fanxingguo.top/classificationperformancemeasures/" /><link rel="prev" href="http://fanxingguo.top/linermodel/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "二元分类器性能的衡量",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/fanxingguo.top\/classificationperformancemeasures\/"
+    },"genre": "posts","keywords": "ROC曲线, 混淆矩阵, 召回率, 精度, F1分数","wordcount":  1943 ,
+    "url": "http:\/\/fanxingguo.top\/classificationperformancemeasures\/","datePublished": "2022-05-27T18:46:55+08:00","dateModified": "2022-05-27T18:46:55+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "兴国"
+      },"description": ""
+  }
+  </script></head>
+  <body header-desktop="sticky" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script><div class="wrapper"><header class="desktop" id="header-desktop">
+
+  
+
+  
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="兴国的夏天"><span class="header-title-pre"><i class="far fa-kiss-wink-heart fa-fw"></i></span><span class="header-title-text">兴国的夏天</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >文章</a></li><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >分类</a></li><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >标签</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fas fa-adjust fa-fw"></i>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header><header class="mobile" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="兴国的夏天"><span class="header-title-pre"><i class="far fa-kiss-wink-heart fa-fw"></i></span><span class="header-title-text">兴国的夏天</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >文章</a></li><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >分类</a></li><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >标签</a></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fas fa-adjust fa-fw"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header>
+<div class="search-dropdown desktop">
+  <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+  <div id="search-dropdown-mobile"></div>
+</div>
+<main class="container" page-style="normal"><aside class="toc" id="toc-auto"><h2 class="toc-title">目录</h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    
+  </aside>
+
+  <article class="page single"><h1 class="single-title animate__animated animate__flipInX">二元分类器性能的衡量</h1><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><img
+    class="lazyload avatar"
+    src="/svg/loading.min.svg"
+    data-src="https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg"
+    data-srcset="https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg, https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg 1.5x, https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg 2x"
+    data-sizes="auto"
+    alt="兴国"
+    title="兴国" />&nbsp;兴国</span></span>
+          <span class="post-category">收录于 <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"><i class="far fa-folder fa-fw"></i>&nbsp;机器学习</a></span></div>
+      <div class="post-meta-line"><span title=2022-05-27&#32;18:46:55>
+            <i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-05-27" >2022-05-27</time>
+          </span>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1943 字&nbsp;
+        <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+    </div><div class="details toc" id="toc-static" kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fas fa-angle-right"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#首先建立一个分类模型">首先建立一个分类模型</a></li>
+    <li><a href="#混淆矩阵">混淆矩阵</a></li>
+    <li><a href="#精度和召回率">精度和召回率</a></li>
+    <li><a href="#精度召回率权衡">精度/召回率权衡</a></li>
+    <li><a href="#roc-曲线">ROC 曲线</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>介绍 混淆矩阵、精度和召回率、F1值、ROC曲线</p>
+<h2 id="首先建立一个分类模型">首先建立一个分类模型</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sklearn</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span> <span class="c1"># 保持统一的随机数</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">data_X</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&#34;900samples0519count.csv&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">data_Y</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&#34;Sample_info0519count.csv&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">X_all</span><span class="o">=</span><span class="n">data_X</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&#34;Unnamed: 0&#34;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">data_Y</span><span class="o">.</span><span class="n">Group</span><span class="p">[</span><span class="n">data_Y</span><span class="p">[</span><span class="s2">&#34;Group&#34;</span><span class="p">]</span><span class="o">==</span><span class="s2">&#34;T2DM&#34;</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span> <span class="c1"># 2型糖尿病</span>
+</span></span><span class="line"><span class="cl"><span class="n">data_Y</span><span class="o">.</span><span class="n">Group</span><span class="p">[</span><span class="n">data_Y</span><span class="p">[</span><span class="s2">&#34;Group&#34;</span><span class="p">]</span><span class="o">==</span><span class="s2">&#34;NGT&#34;</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="n">Y_all</span><span class="o">=</span><span class="n">data_Y</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&#34;Sample&#34;</span><span class="p">,</span><span class="s2">&#34;Dataset&#34;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 随机打乱</span>
+</span></span><span class="line"><span class="cl"><span class="n">data_size</span> <span class="o">=</span> <span class="n">Y_all</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 数据集个数</span>
+</span></span><span class="line"><span class="cl"><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">data_size</span><span class="p">)</span> <span class="c1"># 生成0到datasize个数</span>
+</span></span><span class="line"><span class="cl"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="c1"># 随机打乱arr数组</span>
+</span></span><span class="line"><span class="cl"><span class="n">X_allRd</span> <span class="o">=</span> <span class="n">X_all</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">arr</span><span class="p">]</span> <span class="c1"># 将data以arr索引重新组合</span>
+</span></span><span class="line"><span class="cl"><span class="n">Y_allRd</span> <span class="o">=</span> <span class="n">Y_all</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">arr</span><span class="p">]</span> <span class="c1"># 将label以arr索引重新组合</span>
+</span></span><span class="line"><span class="cl"><span class="n">Y_allRd</span> <span class="o">=</span> <span class="n">Y_allRd</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="c1"># Y_allRd 展平</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 划分数据集</span>
+</span></span><span class="line"><span class="cl"><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">X_allRd</span><span class="p">[:</span><span class="mi">700</span><span class="p">],</span> <span class="n">X_allRd</span><span class="p">[</span><span class="mi">700</span><span class="p">:],</span> <span class="n">Y_allRd</span><span class="p">[:</span><span class="mi">700</span><span class="p">],</span> <span class="n">Y_allRd</span><span class="p">[</span><span class="mi">700</span><span class="p">:]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 对标签设置 True 和 False </span>
+</span></span><span class="line"><span class="cl"><span class="n">y_train_1</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">y_test_1</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_test</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用随机梯度进行分类</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">SGDClassifier</span>
+</span></span><span class="line"><span class="cl"><span class="n">sgd_clf</span> <span class="o">=</span> <span class="n">SGDClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">sgd_clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 使用交叉验证测量准确率</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_score</span>
+</span></span><span class="line"><span class="cl"><span class="n">cross_val_score</span><span class="p">(</span><span class="n">sgd_clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_1</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">&#34;accuracy&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 输出：array([0.63247863, 0.48497854, 0.4806867 ])</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里我们看到 3折交叉验证的测试集准确率最好的为0.6。</p>
+<p>下面我们实现一个分类器，将预测的数据全部“蒙”错，然后查看准确率。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Never1Classifier</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">pass</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">never_1_clf</span> <span class="o">=</span> <span class="n">Never1Classifier</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">cross_val_score</span><span class="p">(</span><span class="n">never_1_clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_1</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">&#34;accuracy&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 输出：array([0.68376068, 0.64377682, 0.63519313])</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>居然我们自己实现的全蒙错的分类器比训练的分类器还好，是不是意味着有可能 训练的分类器在蒙。不能通过准确率，我们如何证实他确实是蒙的？通过混淆矩阵</p>
+<h2 id="混淆矩阵">混淆矩阵</h2>
+<p>如果识别一个数字是不是5，可能有以下四种情况。如下图所示，纵坐标actual表示实际情况，横坐标predicted表示预测情况。</p>
+<ul>
+<li>真阳性（TP）预测对了，预测是真（阳）</li>
+<li>假阳性（FP）预测错了，预测结果为真（阳）</li>
+<li>真阴性（TN）预测对了，预测为假（阴）</li>
+<li>假阴性（FN）预测错了，预测为阴</li>
+</ul>
+<p>对于上面字母的记忆，前两个字母T、F表示 预测的对不对，其中T（True）是预测对，F（False）是预测错。后两个字母P、N，表示预测的结果，P（Positive）表示预测的为阳性，注意这是预测的结果，实际可不一定为真的。N（Negative）预测为阴性。这样FN，就是表示：被错误的预测为假的，换句话说其实是真的。</p>
+<p>下面是混淆矩阵图</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://cdn.51dream.top/blog/image-20220527171033232.png"
+    data-srcset="https://cdn.51dream.top/blog/image-20220527171033232.png, https://cdn.51dream.top/blog/image-20220527171033232.png 1.5x, https://cdn.51dream.top/blog/image-20220527171033232.png 2x"
+    data-sizes="auto"
+    alt="https://cdn.51dream.top/blog/image-20220527171033232.png"
+    title="image-20220527171033232" /></p>
+<p>我们看一下全蒙错的分类器混淆矩阵，数组的数字表示预测数据的个数。可以看到，无论实际是真的还是假的，都被预测为阴，而预测为阳性的个数是0个。这样我们可以百分百确定，这是蒙的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_predict</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">y_train_pred</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">never_1_clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_1</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_train_1</span><span class="p">,</span> <span class="n">y_train_pred</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#    array([[458,   0],</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#           [242,   0]])</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>看一下训练的分类器混淆矩阵，可以看见分类器确实在努力的去分类了，尽管准确率不如蒙的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">y_train_pred</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">sgd_clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_1</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_train_1</span><span class="p">,</span> <span class="n">y_train_pred</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#    array([[224, 234],</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#           [ 93, 149]])</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="精度和召回率">精度和召回率</h2>
+<p>精度是衡量预测一个正样本，我能够有多少把握相信你。具体定义如下：</p>
+<p>$精度=\frac{TP}{TP+FP}$</p>
+<p>精度越高，意味着预测越准，但是却不能保证实际为真的数据都被预测到。比如10个实际为真的样本，但只预测到了1个（TP=1），而且所有的预测的阳性样本，就只有这一个预测为阳性的。这样精度也不能很全面衡量分类器的效果。这里我们结合使用召回率来完善上面的不足。</p>
+<p>召回率是衡量能否把所有为实际为真的样本都预测到，虽然可能包含实际为假的预测为阳性了，但是实际为真的都被找到是一件很成功的事情。比如，医院检查是否患病，如果召回率为99%那么绝大多数的病人都能被检测到，不至于患病却没有被及时发现从而贻误病情。当然这里没有患病的也有可能被检测为阳性，这里我们可以对检测为阳性，进行二次检测，换句话说召回他们来作复查。这也就是 召回率，具体定义：</p>
+<p>$召回率=\frac{TP}{TP+FN}$</p>
+<p>如果增加检测的敏感性，可能 很多未患病的也被检测为阳性，那么意味着 FP值增加，精度减小，FN减小，则召回率增加。下图是该示意图，如果增加敏感性，降低阈值，让更多数据纳入，则召回率会增加，而精度会降低。</p>
+<p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://cdn.51dream.top/blog/image-20220527175900480.png"
+    data-srcset="https://cdn.51dream.top/blog/image-20220527175900480.png, https://cdn.51dream.top/blog/image-20220527175900480.png 1.5x, https://cdn.51dream.top/blog/image-20220527175900480.png 2x"
+    data-sizes="auto"
+    alt="https://cdn.51dream.top/blog/image-20220527175900480.png"
+    title="image-20220527175900480" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 精度（准确率）</span>
+</span></span><span class="line"><span class="cl"><span class="n">precision_score</span><span class="p">(</span><span class="n">y_train_1</span><span class="p">,</span> <span class="n">y_train_pred</span><span class="p">)</span> <span class="c1"># 0.38903394255874674</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 召回率</span>
+</span></span><span class="line"><span class="cl"><span class="n">recall_score</span><span class="p">(</span><span class="n">y_train_1</span><span class="p">,</span> <span class="n">y_train_pred</span><span class="p">)</span> <span class="c1"># 0.6157024793388429</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到不同的阈值，会对应不同的精度和召回率，这样可以画一个图形，这就是 精度/召回率（PR）曲线</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">y_scores</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">sgd_clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_1</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                             <span class="n">method</span><span class="o">=</span><span class="s2">&#34;decision_function&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">precision_recall_curve</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">precisions</span><span class="p">,</span> <span class="n">recalls</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">precision_recall_curve</span><span class="p">(</span><span class="n">y_train_1</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">plot_precision_recall_vs_threshold</span><span class="p">(</span><span class="n">precisions</span><span class="p">,</span> <span class="n">recalls</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">thresholds</span><span class="p">,</span> <span class="n">precisions</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&#34;b--&#34;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&#34;Precision&#34;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">thresholds</span><span class="p">,</span> <span class="n">recalls</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&#34;g-&#34;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&#34;Recall&#34;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&#34;lower right&#34;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="c1"># Not shown in the book</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&#34;Threshold&#34;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>        <span class="c1"># Not shown</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>                              <span class="c1"># Not shown</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mf">9.93552427e+13</span><span class="p">,</span> <span class="mf">1.59360987e+14</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>             <span class="c1"># Not shown</span>
+</span></span><span class="line"><span class="cl"><span class="n">plot_precision_recall_vs_threshold</span><span class="p">(</span><span class="n">precisions</span><span class="p">,</span> <span class="n">recalls</span><span class="p">,</span> <span class="n">thresholds</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://cdn.51dream.top/blog/image-20220527181041761.png"
+    data-srcset="https://cdn.51dream.top/blog/image-20220527181041761.png, https://cdn.51dream.top/blog/image-20220527181041761.png 1.5x, https://cdn.51dream.top/blog/image-20220527181041761.png 2x"
+    data-sizes="auto"
+    alt="https://cdn.51dream.top/blog/image-20220527181041761.png"
+    title="image-20220527181041761" /></p>
+<h2 id="精度召回率权衡">精度/召回率权衡</h2>
+<p>F1值，让上面两个衡量指标变成一个，便于判断分类器性能</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">f1_score</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 我们可以很方便地将精度和召回率组合成一个单一的指标，称 为F 1 分数。</span>
+</span></span><span class="line"><span class="cl"><span class="n">f1_score</span><span class="p">(</span><span class="n">y_train_1</span><span class="p">,</span> <span class="n">y_train_pred</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 0.4768</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="roc-曲线">ROC 曲线</h2>
+<p>ROC 与精度/召回率曲线非常相似，但绘制的不是精度 和召回率，而是真正类率（召回率的另一名称）和假正类率（FPR）。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-PYTHON" data-lang="PYTHON"><span class="line"><span class="cl"><span class="n">y_scores</span> <span class="o">=</span> <span class="n">cross_val_predict</span><span class="p">(</span><span class="n">sgd_clf</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test_1</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                             <span class="n">method</span><span class="o">=</span><span class="s2">&#34;decision_function&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_curve</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y_test_1</span><span class="p">,</span> <span class="n">y_scores</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">plot_roc_curve</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;k--&#39;</span><span class="p">)</span> <span class="c1"># dashed diagonal</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>                                    <span class="c1"># Not shown in the book</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate (Fall-Out)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> <span class="c1"># Not shown</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate (Recall)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>    <span class="c1"># Not shown</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>  
+</span></span><span class="line"><span class="cl"><span class="n">plot_roc_curve</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span><span class="s2">&#34;SGDClassifier&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&#34;lower right&#34;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://cdn.51dream.top/blog/image-20220527184020733.png"
+    data-srcset="https://cdn.51dream.top/blog/image-20220527184020733.png, https://cdn.51dream.top/blog/image-20220527184020733.png 1.5x, https://cdn.51dream.top/blog/image-20220527184020733.png 2x"
+    data-sizes="auto"
+    alt="https://cdn.51dream.top/blog/image-20220527184020733.png"
+    title="image-20220527184020733" /></p>
+<p>ROC曲线图形越向左上角意味着分类器性能越好，下面实现一个随机森林分类器，比较两个分类器，可见随机森林要比随机梯度分类器性能高一些。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-PYTHON" data-lang="PYTHON"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+</span></span><span class="line"><span class="cl"><span class="n">rfc1</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_leaf_nodes</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">rfc1</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train_1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">pre_y</span> <span class="o">=</span> <span class="n">rfc1</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">fpr_Nb</span><span class="p">,</span> <span class="n">tpr_Nb</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y_test_1</span><span class="p">,</span> <span class="n">pre_y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>                                   
+</span></span><span class="line"><span class="cl"><span class="n">plot_roc_curve</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span><span class="s2">&#34;SGDClassifier&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">plot_roc_curve</span><span class="p">(</span><span class="n">fpr_Nb</span><span class="p">,</span> <span class="n">tpr_Nb</span><span class="p">,</span><span class="s2">&#34;RandomForestClassifier&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&#34;lower right&#34;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>                    
+</span></span><span class="line"><span class="cl"><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+    class="lazyload"
+    src="/svg/loading.min.svg"
+    data-src="https://cdn.51dream.top/blog/image-20220527184101197.png"
+    data-srcset="https://cdn.51dream.top/blog/image-20220527184101197.png, https://cdn.51dream.top/blog/image-20220527184101197.png 1.5x, https://cdn.51dream.top/blog/image-20220527184101197.png 2x"
+    data-sizes="auto"
+    alt="https://cdn.51dream.top/blog/image-20220527184101197.png"
+    title="image-20220527184101197" /></p></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title=2022-05-27&#32;18:46:55>更新于 2022-05-27</span>
+      </div>
+      <div class="post-info-license"></div>
+    </div>
+    <div class="post-info-line">
+      <div class="post-info-md"></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://fanxingguo.top/classificationperformancemeasures/" data-title="二元分类器性能的衡量" data-hashtags="ROC曲线,混淆矩阵,召回率,精度,F1分数"><i class="fab fa-twitter fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://fanxingguo.top/classificationperformancemeasures/" data-hashtag="ROC曲线"><i class="fab fa-facebook-square fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://fanxingguo.top/classificationperformancemeasures/" data-title="二元分类器性能的衡量" data-web><i class="fab fa-whatsapp fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://fanxingguo.top/classificationperformancemeasures/" data-title="二元分类器性能的衡量"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://fanxingguo.top/classificationperformancemeasures/" data-title="二元分类器性能的衡量"><i class="fab fa-weibo fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://fanxingguo.top/classificationperformancemeasures/" data-title="二元分类器性能的衡量" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://fanxingguo.top/classificationperformancemeasures/" data-title="二元分类器性能的衡量" data-description=""><i class="fab fa-blogger fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://fanxingguo.top/classificationperformancemeasures/" data-title="二元分类器性能的衡量"><i class="fab fa-evernote fa-fw"></i></a>
+  </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/roc%E6%9B%B2%E7%BA%BF/">ROC曲线</a>,&nbsp;<a href="/tags/%E6%B7%B7%E6%B7%86%E7%9F%A9%E9%98%B5/">混淆矩阵</a>,&nbsp;<a href="/tags/%E5%8F%AC%E5%9B%9E%E7%8E%87/">召回率</a>,&nbsp;<a href="/tags/%E7%B2%BE%E5%BA%A6/">精度</a>,&nbsp;<a href="/tags/f1%E5%88%86%E6%95%B0/">F1分数</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/linermodel/" class="prev" rel="prev" title="一个简单的线性回归例子"><i class="fas fa-angle-left fa-fw"></i>一个简单的线性回归例子</a></div>
+</div>
+</article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright"><i class="far fa-copyright fa-fw"></i>
+            <span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">
+              <a
+  href="/"
+  
+  
+  
+  
+  
+  
+>兴国</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics"></div><div class="footer-line ibruce">
+          <span id="busuanzi_container_site_uv" title='总访客数'><i class="far fa-user fa-fw"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin fa-fw"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='总访问量'><i class="far fa-eye fa-fw"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin fa-fw"></i></span></span>
+        </div><div class="footer-line beian"><span class="gov">37030502000740</span><span class="icp footer-divider">鲁ICP备20000963号-3</span></div></div>
+
+
+
+  </footer></div><div class="widgets">
+  <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+      <i class="fas fa-arrow-up fa-fw"></i>
+    </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+      <i class="fas fa-comment fa-fw"></i>
+    </a>
+  </div><div id="mask"></div>
+</div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js" async defer></script><script type="text/javascript" src="/lib/sharer/sharer.min.js" async defer></script><script type="text/javascript" src="/lib/katex/katex.min.js" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.js" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.js" defer></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":30},"comment":{},"enablePWA":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false}};</script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="/js/_custom.min.js" defer></script><script type="text/javascript">
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-45175394-1', { 'anonymize_ip': true });
+    </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=UA-45175394-1" async></script></body>
+</html>

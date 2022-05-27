@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>ROC曲线 - 标签 - 兴国的夏天</title>
+    <link>http://fanxingguo.top/tags/roc%E6%9B%B2%E7%BA%BF/</link>
+    <description>ROC曲线 - 标签 - 兴国的夏天</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Fri, 27 May 2022 18:46:55 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/tags/roc%E6%9B%B2%E7%BA%BF/" rel="self" type="application/rss+xml" /><item>
+  <title>二元分类器性能的衡量</title>
+  <link>http://fanxingguo.top/classificationperformancemeasures/</link>
+  <pubDate>Fri, 27 May 2022 18:46:55 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/classificationperformancemeasures/</guid>
+  <description><![CDATA[<p>介绍 混淆矩阵、精度和召回率、F1值、ROC曲线</p>]]></description>
+</item></channel>
+</rss>
