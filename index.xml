@@ -4,9 +4,16 @@
     <link>http://fanxingguo.top/</link>
     <description>这是我的全新 Hugo 网站</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
-      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Fri, 27 May 2022 18:46:55 &#43;0800</lastBuildDate>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Sat, 28 May 2022 20:12:14 &#43;0800</lastBuildDate>
       <atom:link href="http://fanxingguo.top/index.xml" rel="self" type="application/rss+xml" />
     <item>
+  <title>学习过程，矛盾的转移</title>
+  <link>http://fanxingguo.top/learnmethods/</link>
+  <pubDate>Sat, 28 May 2022 20:12:14 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/learnmethods/</guid>
+  <description><![CDATA[<p>学习的三个层次：基础、强化、拔高</p>]]></description>
+</item><item>
   <title>二元分类器性能的衡量</title>
   <link>http://fanxingguo.top/classificationperformancemeasures/</link>
   <pubDate>Fri, 27 May 2022 18:46:55 &#43;0800</pubDate>
