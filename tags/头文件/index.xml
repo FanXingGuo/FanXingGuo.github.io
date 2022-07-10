@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>头文件 - 标签 - 兴国的夏天</title>
+    <link>http://fanxingguo.top/tags/%E5%A4%B4%E6%96%87%E4%BB%B6/</link>
+    <description>头文件 - 标签 - 兴国的夏天</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Sun, 10 Jul 2022 18:58:06 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/tags/%E5%A4%B4%E6%96%87%E4%BB%B6/" rel="self" type="application/rss+xml" /><item>
+  <title>C&#43;&#43;项目构建</title>
+  <link>http://fanxingguo.top/cppdemocreation/</link>
+  <pubDate>Sun, 10 Jul 2022 18:58:06 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/cppdemocreation/</guid>
+  <description><![CDATA[<p>如果一个main文件如果包含太多类、函数，代码可以达到几千行，不利于项目管理。一种方法是，将一些类或者函数，写在另一个文件里面（头文件、库），到时候像引入iostream头文件一样引入自己写的库，在编译运行的时候，把自己的库编译好，连接到 可执行文件里面即可。</p>]]></description>
+</item></channel>
+</rss>

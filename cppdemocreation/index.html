@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <title>C&#43;&#43;项目构建 - 兴国的夏天</title><meta name="author" content="兴国: ">
+<meta name="description" content="如果一个main文件如果包含太多类、函数，代码可以达到几千行，不利于项目管理。一种方法是，将一些类或者函数，写在另一个文件里面（头文件、库），到时候像引入iostream头文件一样引入自己写的库，在编译运行的时候，把自己的库编译好，连接到 可执行文件里面即可。" />
+<meta name="keywords" content="C&#43;&#43;,项目构建,头文件,cmake" /><meta itemprop="name" content="C&#43;&#43;项目构建">
+<meta itemprop="description" content="如果一个main文件如果包含太多类、函数，代码可以达到几千行，不利于项目管理。一种方法是，将一些类或者函数，写在另一个文件里面（头文件、库），到时候像引入iostream头文件一样引入自己写的库，在编译运行的时候，把自己的库编译好，连接到 可执行文件里面即可。"><meta itemprop="datePublished" content="2022-07-10T18:58:06+08:00" />
+<meta itemprop="dateModified" content="2022-07-10T18:58:06+08:00" />
+<meta itemprop="wordCount" content="1107"><meta itemprop="image" content="http://fanxingguo.top/avatar.jpg"/>
+<meta itemprop="keywords" content="C&#43;&#43;,项目构建,头文件,cmake," /><meta property="og:title" content="C&#43;&#43;项目构建" />
+<meta property="og:description" content="如果一个main文件如果包含太多类、函数，代码可以达到几千行，不利于项目管理。一种方法是，将一些类或者函数，写在另一个文件里面（头文件、库），到时候像引入iostream头文件一样引入自己写的库，在编译运行的时候，把自己的库编译好，连接到 可执行文件里面即可。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://fanxingguo.top/cppdemocreation/" /><meta property="og:image" content="http://fanxingguo.top/avatar.jpg"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-10T18:58:06+08:00" />
+<meta property="article:modified_time" content="2022-07-10T18:58:06+08:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://fanxingguo.top/avatar.jpg"/>
+
+<meta name="twitter:title" content="C&#43;&#43;项目构建"/>
+<meta name="twitter:description" content="如果一个main文件如果包含太多类、函数，代码可以达到几千行，不利于项目管理。一种方法是，将一些类或者函数，写在另一个文件里面（头文件、库），到时候像引入iostream头文件一样引入自己写的库，在编译运行的时候，把自己的库编译好，连接到 可执行文件里面即可。"/>
+<meta name="application-name" content="xgBlog">
+<meta name="apple-mobile-web-app-title" content="xgBlog"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#252627"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://cdn.51dream.top/blog/icons8-%e9%a6%96%e9%a1%b5.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://fanxingguo.top/cppdemocreation/" /><link rel="prev" href="http://fanxingguo.top/learnmethods/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "C++项目构建",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/fanxingguo.top\/cppdemocreation\/"
+    },"genre": "posts","keywords": "C\u002b\u002b, 项目构建, 头文件, cmake","wordcount":  1107 ,
+    "url": "http:\/\/fanxingguo.top\/cppdemocreation\/","datePublished": "2022-07-10T18:58:06+08:00","dateModified": "2022-07-10T18:58:06+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "兴国"
+      },"description": ""
+  }
+  </script></head>
+  <body header-desktop="sticky" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script><div class="wrapper"><header class="desktop" id="header-desktop">
+
+  
+
+  
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="兴国的夏天"><span class="header-title-pre"><i class="far fa-kiss-wink-heart fa-fw"></i></span><span class="header-title-text">兴国的夏天</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >文章</a></li><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >分类</a></li><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >标签</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fas fa-adjust fa-fw"></i>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header><header class="mobile" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="兴国的夏天"><span class="header-title-pre"><i class="far fa-kiss-wink-heart fa-fw"></i></span><span class="header-title-text">兴国的夏天</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >文章</a></li><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >分类</a></li><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >标签</a></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fas fa-adjust fa-fw"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header>
+<div class="search-dropdown desktop">
+  <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+  <div id="search-dropdown-mobile"></div>
+</div>
+<main class="container" page-style="normal"><aside class="toc" id="toc-auto"><h2 class="toc-title">目录</h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    
+  </aside>
+
+  <article class="page single"><h1 class="single-title animate__animated animate__flipInX">C&#43;&#43;项目构建</h1><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><img
+    class="lazyload avatar"
+    src="/svg/loading.min.svg"
+    data-src="https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg"
+    data-srcset="https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg, https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg 1.5x, https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg 2x"
+    data-sizes="auto"
+    alt="兴国"
+    title="兴国" />&nbsp;兴国</span></span>
+          <span class="post-category">收录于 <a href="/categories/%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0/"><i class="far fa-folder fa-fw"></i>&nbsp;编程学习</a></span></div>
+      <div class="post-meta-line"><span title=2022-07-10&#32;18:58:06>
+            <i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-10" >2022-07-10</time>
+          </span>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1107 字&nbsp;
+        <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+    </div><div class="details toc" id="toc-static" kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fas fa-angle-right"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#构建项目的目录结构">构建项目的目录结构</a></li>
+    <li><a href="#文件介绍">文件介绍</a></li>
+    <li><a href="#代码文件内容">代码文件内容</a></li>
+    <li><a href="#cmake文件内容">cmake文件内容</a>
+      <ul>
+        <li><a href="#项目中-cmakeliststxt">项目中 CMakeLists.txt</a></li>
+        <li><a href="#lib目录下的cmakeliststxt">lib目录下的CMakeLists.txt</a></li>
+        <li><a href="#src目录下的cmakeliststxt">src目录下的CMakeLists.txt</a></li>
+      </ul>
+    </li>
+    <li><a href="#项目构建步骤">项目构建步骤</a>
+      <ul>
+        <li><a href="#1编写好代码">1、编写好代码</a></li>
+        <li><a href="#2编译自定义库文件">2、编译自定义库文件</a></li>
+        <li><a href="#3编译可执行文件并链接到自己的库">3、编译可执行文件，并链接到自己的库</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>如果一个main文件如果包含太多类、函数，代码可以达到几千行，不利于项目管理。一种方法是，将一些类或者函数，写在另一个文件里面（头文件、库），到时候像引入iostream头文件一样引入自己写的库，在编译运行的时候，把自己的库编译好，连接到 可执行文件里面即可。</p>
+<h2 id="构建项目的目录结构">构建项目的目录结构</h2>
+<img src="https://cdn.51dream.top/blog/image-20220710182245354.png" alt="image-20220710182245354" style="zoom:50%;" />
+<h2 id="文件介绍">文件介绍</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># tree
+</span></span><span class="line"><span class="cl">.
+</span></span><span class="line"><span class="cl">├── CMakeLists.txt  # 项目目录下文件
+</span></span><span class="line"><span class="cl">├── build
+</span></span><span class="line"><span class="cl">│   └── bin 
+</span></span><span class="line"><span class="cl">├── lib
+</span></span><span class="line"><span class="cl">│   ├── CMakeLists.txt  # 用于生成相关库文件
+</span></span><span class="line"><span class="cl">│   ├── mystr.cpp  # 自定义的库
+</span></span><span class="line"><span class="cl">│   └── mystr.h    # 自定义的头文件
+</span></span><span class="line"><span class="cl">└── src
+</span></span><span class="line"><span class="cl">    ├── CMakeLists.txt # 用于生成可执行文件，同时将库链接到可执行文件中
+</span></span><span class="line"><span class="cl">    └── main.cpp  # 主函数入口
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="代码文件内容">代码文件内容</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">//main.cpp  （位于src目录下）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;../lib/mystr.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MyStr</span> <span class="n">s</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">m</span><span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">c_str</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&#34;hello&#34;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">// mystr.h （位于lib目录下）
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Created by 范兴国 on 2022/7/10.
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#ifndef STLLEN_MYSTR_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define STLLEN_MYSTR_H
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">class</span> <span class="nc">MyStr</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">*</span> <span class="n">m_str</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MyStr</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">c_str</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">MyStr</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif </span><span class="c1">//STLLEN_MYSTR_H
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">//mystr.cpp  （位于lib目录下）
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Created by 范兴国 on 2022/7/10.
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;mystr.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="n">MyStr</span><span class="o">::</span><span class="n">MyStr</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">m_str</span><span class="o">=</span><span class="k">new</span> <span class="kt">char</span><span class="p">(</span><span class="sc">&#39;\0&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">MyStr</span><span class="o">::</span>  <span class="n">c_str</span><span class="p">()</span><span class="k">const</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">m_str</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">MyStr</span><span class="o">::~</span><span class="n">MyStr</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nb">NULL</span><span class="o">!=</span><span class="n">m_str</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">delete</span><span class="p">[]</span> <span class="n">m_str</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="cmake文件内容">cmake文件内容</h2>
+<h3 id="项目中-cmakeliststxt">项目中 CMakeLists.txt</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.12.3</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">stlLen</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">14</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&#34;./lib&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">link_directories</span><span class="p">(</span><span class="s">build/bin/</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">lib</span> <span class="s">bin</span><span class="p">)</span>  <span class="c"># 这里先编译库，然后再编译可执行文件
+</span></span></span><span class="line"><span class="cl"><span class="c">#add_subdirectory(src bin)
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="lib目录下的cmakeliststxt">lib目录下的CMakeLists.txt</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">SET</span><span class="p">(</span><span class="s">LIBMYSTR_SRC</span> <span class="s">mystr.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">ADD_LIBRARY</span><span class="p">(</span><span class="s">mystr_static</span> <span class="s">STATIC</span> <span class="o">${</span><span class="nv">LIBMYSTR_SRC</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">SET_TARGET_PROPERTIES</span><span class="p">(</span><span class="s">mystr_static</span> <span class="s">PROPERTIES</span> <span class="s">OUTPUT_NAME</span> <span class="s2">&#34;mystr&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">SET_TARGET_PROPERTIES</span><span class="p">(</span><span class="s">mystr_static</span> <span class="s">PROPERTIES</span> <span class="s">CLEAN_DIRECT_OUTPUT</span> <span class="s">1</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="src目录下的cmakeliststxt">src目录下的CMakeLists.txt</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">str</span> <span class="s">main.cpp</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">str</span> <span class="s">libmystr.a</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="项目构建步骤">项目构建步骤</h2>
+<h3 id="1编写好代码">1、编写好代码</h3>
+<p>参考上述代码</p>
+<h3 id="2编译自定义库文件">2、编译自定义库文件</h3>
+<p>主目录CMakeLists.txt</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.12.3</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">stlLen</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">14</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&#34;./lib&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">link_directories</span><span class="p">(</span><span class="s">build/bin/</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">lib</span> <span class="s">bin</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c">#add_subdirectory(src bin) # 注释掉 编译可执行文件，先编译相关库
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>进入 build目录，先执行“cmake ..”，再执行“make”</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">FanXingGuo@fanxingguodeMacBook-Pro build % cmake ..
+</span></span><span class="line"><span class="cl">-- The C compiler identification is AppleClang 11.0.0.11000033
+</span></span><span class="line"><span class="cl">-- The CXX compiler identification is AppleClang 11.0.0.11000033
+</span></span><span class="line"><span class="cl">-- Check <span class="k">for</span> working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc
+</span></span><span class="line"><span class="cl">-- Check <span class="k">for</span> working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc -- works
+</span></span><span class="line"><span class="cl">-- Detecting C compiler ABI info
+</span></span><span class="line"><span class="cl">-- Detecting C compiler ABI info - <span class="k">done</span>
+</span></span><span class="line"><span class="cl">-- Detecting C compile features
+</span></span><span class="line"><span class="cl">-- Detecting C compile features - <span class="k">done</span>
+</span></span><span class="line"><span class="cl">-- Check <span class="k">for</span> working CXX compiler: /Library/Developer/CommandLineTools/usr/bin/c++
+</span></span><span class="line"><span class="cl">-- Check <span class="k">for</span> working CXX compiler: /Library/Developer/CommandLineTools/usr/bin/c++ -- works
+</span></span><span class="line"><span class="cl">-- Detecting CXX compiler ABI info
+</span></span><span class="line"><span class="cl">-- Detecting CXX compiler ABI info - <span class="k">done</span>
+</span></span><span class="line"><span class="cl">-- Detecting CXX compile features
+</span></span><span class="line"><span class="cl">-- Detecting CXX compile features - <span class="k">done</span>
+</span></span><span class="line"><span class="cl">-- Configuring <span class="k">done</span>
+</span></span><span class="line"><span class="cl">-- Generating <span class="k">done</span>
+</span></span><span class="line"><span class="cl">-- Build files have been written to: /Users/FanXingGuo/CLionProjects/stlLen/build
+</span></span><span class="line"><span class="cl">FanXingGuo@fanxingguodeMacBook-Pro build % make
+</span></span><span class="line"><span class="cl">Scanning dependencies of target mystr_static
+</span></span><span class="line"><span class="cl"><span class="o">[</span> 50%<span class="o">]</span> Building CXX object bin/CMakeFiles/mystr_static.dir/mystr.cpp.o
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Linking CXX static library libmystr.a
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Built target mystr_static
+</span></span><span class="line"><span class="cl">FanXingGuo@fanxingguodeMacBook-Pro build % 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可见bin目录中已生成libmystr.a文件</p>
+<img src="https://cdn.51dream.top/blog/image-20220710184608472.png" alt="image-20220710184608472" style="zoom:50%;" />
+<h3 id="3编译可执行文件并链接到自己的库">3、编译可执行文件，并链接到自己的库</h3>
+<p>主目录CMakeLists.txt</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.12.3</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span><span class="s">stlLen</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">14</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="s2">&#34;./lib&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">link_directories</span><span class="p">(</span><span class="s">build/bin/</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c">#add_subdirectory(lib bin) # 注释掉库编译过程，取消注释 可执行文件编译过程
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">src</span> <span class="s">bin</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在build目录下，执行：make，即可</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">FanXingGuo@fanxingguodeMacBook-Pro build % make
+</span></span><span class="line"><span class="cl">-- Configuring <span class="k">done</span>
+</span></span><span class="line"><span class="cl">-- Generating <span class="k">done</span>
+</span></span><span class="line"><span class="cl">-- Build files have been written to: /Users/FanXingGuo/CLionProjects/stlLen/build
+</span></span><span class="line"><span class="cl">Scanning dependencies of target str
+</span></span><span class="line"><span class="cl"><span class="o">[</span> 50%<span class="o">]</span> Building CXX object bin/CMakeFiles/str.dir/main.cpp.o
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Linking CXX executable str
+</span></span><span class="line"><span class="cl"><span class="o">[</span>100%<span class="o">]</span> Built target str
+</span></span><span class="line"><span class="cl">FanXingGuo@fanxingguodeMacBook-Pro build % 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可见，可执行文件已生成</p>
+<img src="https://cdn.51dream.top/blog/image-20220710184850927.png" alt="image-20220710184850927" style="zoom:50%;" />
+<p>最后，测试一下编译的程序</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">FanXingGuo@fanxingguodeMacBook-Pro build % <span class="nb">cd</span> bin 
+</span></span><span class="line"><span class="cl">FanXingGuo@fanxingguodeMacBook-Pro bin % ./str 
+</span></span><span class="line"><span class="cl">hello
+</span></span><span class="line"><span class="cl">FanXingGuo@fanxingguodeMacBook-Pro bin % 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结</h2>
+<p>构建自己的项目，首先是编写好程序代码，然后编写好相关的cmake文件，这里要区别lib和src目录下的内容。最后，分别编译库文件和可执行文件即可。</p></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title=2022-07-10&#32;18:58:06>更新于 2022-07-10</span>
+      </div>
+      <div class="post-info-license"></div>
+    </div>
+    <div class="post-info-line">
+      <div class="post-info-md"></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://fanxingguo.top/cppdemocreation/" data-title="C&#43;&#43;项目构建" data-hashtags="C&#43;&#43;,项目构建,头文件,cmake"><i class="fab fa-twitter fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://fanxingguo.top/cppdemocreation/" data-hashtag="C&#43;&#43;"><i class="fab fa-facebook-square fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://fanxingguo.top/cppdemocreation/" data-title="C&#43;&#43;项目构建" data-web><i class="fab fa-whatsapp fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://fanxingguo.top/cppdemocreation/" data-title="C&#43;&#43;项目构建"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://fanxingguo.top/cppdemocreation/" data-title="C&#43;&#43;项目构建"><i class="fab fa-weibo fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://fanxingguo.top/cppdemocreation/" data-title="C&#43;&#43;项目构建" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://fanxingguo.top/cppdemocreation/" data-title="C&#43;&#43;项目构建" data-description=""><i class="fab fa-blogger fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://fanxingguo.top/cppdemocreation/" data-title="C&#43;&#43;项目构建"><i class="fab fa-evernote fa-fw"></i></a>
+  </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/c&#43;&#43;/">C&#43;&#43;</a>,&nbsp;<a href="/tags/%E9%A1%B9%E7%9B%AE%E6%9E%84%E5%BB%BA/">项目构建</a>,&nbsp;<a href="/tags/%E5%A4%B4%E6%96%87%E4%BB%B6/">头文件</a>,&nbsp;<a href="/tags/cmake/">cmake</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/learnmethods/" class="prev" rel="prev" title="学习过程，矛盾的转移"><i class="fas fa-angle-left fa-fw"></i>学习过程，矛盾的转移</a></div>
+</div>
+</article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright"><i class="far fa-copyright fa-fw"></i>
+            <span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">
+              <a
+  href="/"
+  
+  
+  
+  
+  
+  
+>兴国</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics"></div><div class="footer-line ibruce">
+          <span id="busuanzi_container_site_uv" title='总访客数'><i class="far fa-user fa-fw"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin fa-fw"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='总访问量'><i class="far fa-eye fa-fw"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin fa-fw"></i></span></span>
+        </div><div class="footer-line beian"><span class="gov">37030502000740</span><span class="icp footer-divider">鲁ICP备20000963号-3</span></div></div>
+
+
+
+  </footer></div><div class="widgets">
+  <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+      <i class="fas fa-arrow-up fa-fw"></i>
+    </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+      <i class="fas fa-comment fa-fw"></i>
+    </a>
+  </div><div id="mask"></div>
+</div><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js" async defer></script><script type="text/javascript" src="/lib/sharer/sharer.min.js" async defer></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":30},"comment":{},"enablePWA":true};</script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="/js/_custom.min.js" defer></script><script type="text/javascript">
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-45175394-1', { 'anonymize_ip': true });
+    </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=UA-45175394-1" async></script></body>
+</html>
