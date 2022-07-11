@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>泛型 - 标签 - 兴国的夏天</title>
+    <link>http://fanxingguo.top/tags/%E6%B3%9B%E5%9E%8B/</link>
+    <description>泛型 - 标签 - 兴国的夏天</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Mon, 11 Jul 2022 20:57:06 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/tags/%E6%B3%9B%E5%9E%8B/" rel="self" type="application/rss+xml" /><item>
+  <title>C&#43;&#43; 泛型编程</title>
+  <link>http://fanxingguo.top/cppgeneric/</link>
+  <pubDate>Mon, 11 Jul 2022 20:57:06 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/cppgeneric/</guid>
+  <description><![CDATA[<p>介绍泛型的概念，以及在C++中如何使用。</p>]]></description>
+</item></channel>
+</rss>
