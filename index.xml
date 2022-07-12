@@ -4,9 +4,17 @@
     <link>http://fanxingguo.top/</link>
     <description>这是我的全新 Hugo 网站</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
-      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Mon, 11 Jul 2022 20:57:06 &#43;0800</lastBuildDate>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Tue, 12 Jul 2022 17:56:11 &#43;0800</lastBuildDate>
       <atom:link href="http://fanxingguo.top/index.xml" rel="self" type="application/rss+xml" />
     <item>
+  <title>数组（vector）和迭代器</title>
+  <link>http://fanxingguo.top/vectoriterator/</link>
+  <pubDate>Tue, 12 Jul 2022 17:56:11 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/vectoriterator/</guid>
+  <description><![CDATA[<p>帮助文档：https://cplusplus.com/</p>
+<p>存储任意相同数据类型的数据，容量大小可变的数组</p>]]></description>
+</item><item>
   <title>C&#43;&#43; 泛型编程</title>
   <link>http://fanxingguo.top/cppgeneric/</link>
   <pubDate>Mon, 11 Jul 2022 20:57:06 &#43;0800</pubDate>
