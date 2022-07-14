@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <title>esp32 micropython 超声波测距&#43;数码管显示 - 兴国的夏天</title><meta name="author" content="兴国: ">
+<meta name="description" content="使用esp32 物联网模块，MicroPython 语言，开发一个数码管超声波实时距离的工具。" />
+<meta name="keywords" content="esp32,超声波测距,数码管,micropython" /><meta itemprop="name" content="esp32 micropython 超声波测距&#43;数码管显示">
+<meta itemprop="description" content="使用esp32 物联网模块，MicroPython 语言，开发一个数码管超声波实时距离的工具。"><meta itemprop="datePublished" content="2022-07-14T10:47:09+08:00" />
+<meta itemprop="dateModified" content="2022-07-14T10:47:09+08:00" />
+<meta itemprop="wordCount" content="891"><meta itemprop="image" content="http://fanxingguo.top/avatar.jpg"/>
+<meta itemprop="keywords" content="esp32,超声波测距,数码管,micropython," /><meta property="og:title" content="esp32 micropython 超声波测距&#43;数码管显示" />
+<meta property="og:description" content="使用esp32 物联网模块，MicroPython 语言，开发一个数码管超声波实时距离的工具。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://fanxingguo.top/esp32distance/" /><meta property="og:image" content="http://fanxingguo.top/avatar.jpg"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-14T10:47:09+08:00" />
+<meta property="article:modified_time" content="2022-07-14T10:47:09+08:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://fanxingguo.top/avatar.jpg"/>
+
+<meta name="twitter:title" content="esp32 micropython 超声波测距&#43;数码管显示"/>
+<meta name="twitter:description" content="使用esp32 物联网模块，MicroPython 语言，开发一个数码管超声波实时距离的工具。"/>
+<meta name="application-name" content="xgBlog">
+<meta name="apple-mobile-web-app-title" content="xgBlog"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#252627"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://cdn.51dream.top/blog/icons8-%e9%a6%96%e9%a1%b5.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://fanxingguo.top/esp32distance/" /><link rel="prev" href="http://fanxingguo.top/vectoriterator/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "esp32 micropython 超声波测距+数码管显示",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/fanxingguo.top\/esp32distance\/"
+    },"genre": "posts","keywords": "esp32, 超声波测距, 数码管, micropython","wordcount":  891 ,
+    "url": "http:\/\/fanxingguo.top\/esp32distance\/","datePublished": "2022-07-14T10:47:09+08:00","dateModified": "2022-07-14T10:47:09+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "兴国"
+      },"description": ""
+  }
+  </script></head>
+  <body header-desktop="sticky" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script><div class="wrapper"><header class="desktop" id="header-desktop">
+
+  
+
+  
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="兴国的夏天"><span class="header-title-pre"><i class="far fa-kiss-wink-heart fa-fw"></i></span><span class="header-title-text">兴国的夏天</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >文章</a></li><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >分类</a></li><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >标签</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fas fa-adjust fa-fw"></i>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header><header class="mobile" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="兴国的夏天"><span class="header-title-pre"><i class="far fa-kiss-wink-heart fa-fw"></i></span><span class="header-title-text">兴国的夏天</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >文章</a></li><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >分类</a></li><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >标签</a></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fas fa-adjust fa-fw"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header>
+<div class="search-dropdown desktop">
+  <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+  <div id="search-dropdown-mobile"></div>
+</div>
+<main class="container" page-style="normal"><aside class="toc" id="toc-auto"></aside>
+
+  <aside class="aside-custom">
+    
+  </aside>
+
+  <article class="page single"><h1 class="single-title animate__animated animate__flipInX">esp32 micropython 超声波测距&#43;数码管显示</h1><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><img
+    class="lazyload avatar"
+    src="/svg/loading.min.svg"
+    data-src="https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg"
+    data-srcset="https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg, https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg 1.5x, https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg 2x"
+    data-sizes="auto"
+    alt="兴国"
+    title="兴国" />&nbsp;兴国</span></span>
+          <span class="post-category">收录于 <a href="/categories/%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0/"><i class="far fa-folder fa-fw"></i>&nbsp;编程学习</a></span></div>
+      <div class="post-meta-line"><span title=2022-07-14&#32;10:47:09>
+            <i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-14" >2022-07-14</time>
+          </span>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 891 字&nbsp;
+        <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+    </div><div class="content" id="content"><p>使用esp32 物联网模块，MicroPython 语言，开发一个数码管超声波实时距离的工具。</p>
+<p>4位8段数码管接线</p>
+<img src="https://cdn.51dream.top/blog/0_1302014860mCt0.gif" alt="0_1302014860mCt0" style="zoom: 50%;" />
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 接线全点亮测试</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">machine</span><span class="o">,</span> <span class="nn">time</span>
+</span></span><span class="line"><span class="cl"><span class="n">trig</span> <span class="o">=</span> <span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">echo</span> <span class="o">=</span> <span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 需要根据实际接线，依次放入A/B/C/D/E/F/G/DP这8个段位led灯对应到esp8266的GPIO引脚</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 接线对应引脚，如下代码所示例如 esp32中27引脚，对应数码管a，即数码管2号引脚</span>
+</span></span><span class="line"><span class="cl"><span class="n">low</span><span class="o">=</span><span class="p">[</span><span class="mi">27</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">21</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">ledLow</span><span class="o">=</span><span class="p">[]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">s1</span><span class="o">=</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span> <span class="c1"># s1 为数码管SEG1，esp32 13引脚接数码管 1引脚</span>
+</span></span><span class="line"><span class="cl"><span class="n">s2</span><span class="o">=</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s3</span><span class="o">=</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s4</span><span class="o">=</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="mi">23</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="n">low</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ledLow</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">led</span> <span class="ow">in</span> <span class="n">ledLow</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">led</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s1</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s2</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s3</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s4</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><img src="https://cdn.51dream.top/blog/1931657702610_.pic.jpg" alt="1931657702610_.pic" style="zoom: 33%;" />
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 超声波测距，测试</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">machine</span><span class="o">,</span> <span class="nn">time</span>
+</span></span><span class="line"><span class="cl"><span class="n">trig</span> <span class="o">=</span> <span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">echo</span> <span class="o">=</span> <span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">distance</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">trig</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">time</span><span class="o">.</span><span class="n">sleep_us</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">trig</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="n">echo</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">pass</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="n">echo</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ts</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_us</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="n">echo</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">pass</span>
+</span></span><span class="line"><span class="cl">        <span class="n">te</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_us</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tc</span> <span class="o">=</span> <span class="n">te</span> <span class="o">-</span> <span class="n">ts</span>
+</span></span><span class="line"><span class="cl">        <span class="n">distance</span> <span class="o">=</span> <span class="nb">round</span><span class="p">((</span><span class="n">tc</span><span class="o">*</span><span class="mi">170</span><span class="p">)</span><span class="o">/</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">distance</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">dist</span> <span class="o">=</span> <span class="n">distance</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;distance:&#39;</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="s1">&#39;cm&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最后附上完整代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 数码管实时显示超声波测量距离</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">machine</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">machine</span> <span class="kn">import</span> <span class="n">Pin</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">utime</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">_thread</span><span class="o">,</span><span class="nn">time</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">trig</span> <span class="o">=</span> <span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">echo</span> <span class="o">=</span> <span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">stop</span> <span class="o">=</span> <span class="n">Pin</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span><span class="n">machine</span><span class="o">.</span><span class="n">Pin</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">a_lock</span> <span class="o">=</span> <span class="n">_thread</span><span class="o">.</span><span class="n">allocate_lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">numA</span> <span class="o">=</span> <span class="mi">99</span>
+</span></span><span class="line"><span class="cl"><span class="n">leds</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 需要根据实际接线，依次放入A/B/C/D/E/F/G/DP这8个段位led灯对应到esp8266的GPIO引脚</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">27</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">18</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_pin</span> <span class="o">=</span> <span class="n">Pin</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">leds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_pin</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">digs</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 根据实际接线，依次控制1~4四个位置的数码管</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">13</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">23</span><span class="p">]:</span>  <span class="c1"># 实际目前只控制两位，还借用了原DP引脚的接线</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_pin</span> <span class="o">=</span> <span class="n">Pin</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">Pin</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">digs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_pin</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">mapper</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;0&#39;</span><span class="p">:</span> <span class="mh">0xC0</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="mh">0xF9</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span> <span class="mh">0xA4</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="mh">0xB0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;4&#39;</span><span class="p">:</span> <span class="mh">0x99</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">:</span> <span class="mh">0x92</span><span class="p">,</span> <span class="s1">&#39;6&#39;</span><span class="p">:</span> <span class="mh">0x82</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">:</span> <span class="mh">0xF8</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;8&#39;</span><span class="p">:</span> <span class="mh">0x80</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">:</span> <span class="mh">0x90</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="mh">0x88</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="mh">0x83</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="mh">0xA7</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="mh">0xA1</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">:</span> <span class="mh">0x86</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">:</span> <span class="mh">0x8E</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">show_num</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">has_point</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;写入显示字符，转换为十六进制数值并按位点亮&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">value</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span> <span class="k">return</span>
+</span></span><span class="line"><span class="cl">    <span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">&amp;</span> <span class="mh">0x7F</span> <span class="k">if</span> <span class="n">has_point</span> <span class="k">else</span> <span class="n">value</span>  <span class="c1"># 共阳方式</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#     value = (~value | 0x80) if has_point else ~value  # 共阴方式</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">led</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">leds</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># if i==7: continue  # !!!临时屏蔽最高位（转为控制管位开关）</span>
+</span></span><span class="line"><span class="cl">        <span class="n">led</span><span class="o">.</span><span class="n">value</span><span class="p">((</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="n">i</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x01</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">showResu</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">with</span> <span class="n">a_lock</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">num</span><span class="o">=</span><span class="n">numA</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">))</span><span class="o">==</span><span class="mi">4</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># 显示千位</span>
+</span></span><span class="line"><span class="cl">                <span class="n">show_num</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="o">/</span><span class="mi">1000</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">))</span><span class="o">&gt;=</span><span class="mi">3</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># 显示百位</span>
+</span></span><span class="line"><span class="cl">                <span class="n">show_num</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="o">/</span><span class="mi">100</span><span class="o">%</span><span class="mi">10</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">))</span><span class="o">&gt;=</span><span class="mi">2</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># 显示十位</span>
+</span></span><span class="line"><span class="cl">                <span class="n">show_num</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">num</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span><span class="o">%</span><span class="mi">10</span><span class="p">)),</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">))</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># 显示十位</span>
+</span></span><span class="line"><span class="cl">                <span class="n">show_num</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># 显示个位</span>
+</span></span><span class="line"><span class="cl">                <span class="n">show_num</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="o">%</span><span class="mi">10</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># 显示个位</span>
+</span></span><span class="line"><span class="cl">                <span class="n">show_num</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="o">%</span><span class="mi">10</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">digs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="n">utime</span><span class="o">.</span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">distance</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">trig</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">time</span><span class="o">.</span><span class="n">sleep_us</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">trig</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="n">echo</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">pass</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="n">echo</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ts</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_us</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="n">echo</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">pass</span>
+</span></span><span class="line"><span class="cl">        <span class="n">te</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ticks_us</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">tc</span> <span class="o">=</span> <span class="n">te</span> <span class="o">-</span> <span class="n">ts</span>
+</span></span><span class="line"><span class="cl">        <span class="n">distance</span> <span class="o">=</span> <span class="nb">round</span><span class="p">((</span><span class="n">tc</span><span class="o">*</span><span class="mi">170</span><span class="p">)</span><span class="o">/</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">distance</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">_thread</span><span class="o">.</span><span class="n">start_new_thread</span><span class="p">(</span><span class="n">showResu</span><span class="p">,</span> <span class="p">())</span><span class="c1">#启动线程</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="n">a_lock</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">numA</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">distance</span><span class="p">()</span><span class="o">*</span><span class="mi">10</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">numA</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">stop</span><span class="o">.</span><span class="n">value</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title=2022-07-14&#32;10:47:09>更新于 2022-07-14</span>
+      </div>
+      <div class="post-info-license"></div>
+    </div>
+    <div class="post-info-line">
+      <div class="post-info-md"></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://fanxingguo.top/esp32distance/" data-title="esp32 micropython 超声波测距&#43;数码管显示" data-hashtags="esp32,超声波测距,数码管,micropython"><i class="fab fa-twitter fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://fanxingguo.top/esp32distance/" data-hashtag="esp32"><i class="fab fa-facebook-square fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://fanxingguo.top/esp32distance/" data-title="esp32 micropython 超声波测距&#43;数码管显示" data-web><i class="fab fa-whatsapp fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://fanxingguo.top/esp32distance/" data-title="esp32 micropython 超声波测距&#43;数码管显示"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://fanxingguo.top/esp32distance/" data-title="esp32 micropython 超声波测距&#43;数码管显示"><i class="fab fa-weibo fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://fanxingguo.top/esp32distance/" data-title="esp32 micropython 超声波测距&#43;数码管显示" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://fanxingguo.top/esp32distance/" data-title="esp32 micropython 超声波测距&#43;数码管显示" data-description=""><i class="fab fa-blogger fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://fanxingguo.top/esp32distance/" data-title="esp32 micropython 超声波测距&#43;数码管显示"><i class="fab fa-evernote fa-fw"></i></a>
+  </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/esp32/">esp32</a>,&nbsp;<a href="/tags/%E8%B6%85%E5%A3%B0%E6%B3%A2%E6%B5%8B%E8%B7%9D/">超声波测距</a>,&nbsp;<a href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/">数码管</a>,&nbsp;<a href="/tags/micropython/">micropython</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/vectoriterator/" class="prev" rel="prev" title="C&#43;&#43; 数组（vector）和迭代器"><i class="fas fa-angle-left fa-fw"></i>C&#43;&#43; 数组（vector）和迭代器</a></div>
+</div>
+</article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright"><i class="far fa-copyright fa-fw"></i>
+            <span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">
+              <a
+  href="/"
+  
+  
+  
+  
+  
+  
+>兴国</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics"></div><div class="footer-line ibruce">
+          <span id="busuanzi_container_site_uv" title='总访客数'><i class="far fa-user fa-fw"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin fa-fw"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='总访问量'><i class="far fa-eye fa-fw"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin fa-fw"></i></span></span>
+        </div><div class="footer-line beian"><span class="gov">37030502000740</span><span class="icp footer-divider">鲁ICP备20000963号-3</span></div></div>
+
+
+
+  </footer></div><div class="widgets">
+  <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+      <i class="fas fa-arrow-up fa-fw"></i>
+    </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+      <i class="fas fa-comment fa-fw"></i>
+    </a>
+  </div><div id="mask"></div>
+</div><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js" async defer></script><script type="text/javascript" src="/lib/sharer/sharer.min.js" async defer></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":30},"comment":{},"enablePWA":true};</script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="/js/_custom.min.js" defer></script><script type="text/javascript">
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-45175394-1', { 'anonymize_ip': true });
+    </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=UA-45175394-1" async></script></body>
+</html>
