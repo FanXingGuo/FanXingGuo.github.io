@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>类 - 标签 - 兴国的夏天</title>
+    <link>http://fanxingguo.top/tags/%E7%B1%BB/</link>
+    <description>类 - 标签 - 兴国的夏天</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Sat, 16 Jul 2022 11:02:45 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/tags/%E7%B1%BB/" rel="self" type="application/rss+xml" /><item>
+  <title>C&#43;&#43; 类 和对象 构造函数、析构函数</title>
+  <link>http://fanxingguo.top/cppcalss/</link>
+  <pubDate>Sat, 16 Jul 2022 11:02:45 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/cppcalss/</guid>
+  <description><![CDATA[<p>了解C++类的声明、定义，对象 构造函数和析构函数</p>]]></description>
+</item></channel>
+</rss>

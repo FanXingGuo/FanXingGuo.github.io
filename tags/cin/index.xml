@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>cin - 标签 - 兴国的夏天</title>
+    <link>http://fanxingguo.top/tags/cin/</link>
+    <description>cin - 标签 - 兴国的夏天</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Sat, 16 Jul 2022 10:58:31 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/tags/cin/" rel="self" type="application/rss+xml" /><item>
+  <title>C&#43;&#43; 命名空间和cin、cout</title>
+  <link>http://fanxingguo.top/namespacecincout/</link>
+  <pubDate>Sat, 16 Jul 2022 10:58:31 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/namespacecincout/</guid>
+  <description><![CDATA[<p>使用c++命名空间namespace，和输入输出 cin和cout</p>]]></description>
+</item></channel>
+</rss>

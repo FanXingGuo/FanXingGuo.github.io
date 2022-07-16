@@ -4,7 +4,21 @@
     <link>http://fanxingguo.top/categories/%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0/</link>
     <description>编程学习 - 分类 - 兴国的夏天</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
-      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Thu, 14 Jul 2022 10:47:09 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/categories/%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0/" rel="self" type="application/rss+xml" /><item>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Sat, 16 Jul 2022 11:02:45 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/categories/%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0/" rel="self" type="application/rss+xml" /><item>
+  <title>C&#43;&#43; 类 和对象 构造函数、析构函数</title>
+  <link>http://fanxingguo.top/cppcalss/</link>
+  <pubDate>Sat, 16 Jul 2022 11:02:45 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/cppcalss/</guid>
+  <description><![CDATA[<p>了解C++类的声明、定义，对象 构造函数和析构函数</p>]]></description>
+</item><item>
+  <title>C&#43;&#43; 命名空间和cin、cout</title>
+  <link>http://fanxingguo.top/namespacecincout/</link>
+  <pubDate>Sat, 16 Jul 2022 10:58:31 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/namespacecincout/</guid>
+  <description><![CDATA[<p>使用c++命名空间namespace，和输入输出 cin和cout</p>]]></description>
+</item><item>
   <title>esp32 micropython 超声波测距&#43;数码管显示</title>
   <link>http://fanxingguo.top/esp32distance/</link>
   <pubDate>Thu, 14 Jul 2022 10:47:09 &#43;0800</pubDate>
