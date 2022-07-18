@@ -4,7 +4,14 @@
     <link>http://fanxingguo.top/posts/</link>
     <description>所有文章 | 兴国的夏天</description>
     <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>study1997.fxg@hotmail.com (兴国)</managingEditor>
-      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Sat, 16 Jul 2022 11:02:45 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/posts/" rel="self" type="application/rss+xml" /><item>
+      <webMaster>study1997.fxg@hotmail.com (兴国)</webMaster><lastBuildDate>Mon, 18 Jul 2022 19:43:35 &#43;0800</lastBuildDate><atom:link href="http://fanxingguo.top/posts/" rel="self" type="application/rss+xml" /><item>
+  <title>C&#43;&#43; 构造函数、new deldte、this指针</title>
+  <link>http://fanxingguo.top/constructionnewdeletethis/</link>
+  <pubDate>Mon, 18 Jul 2022 19:43:35 &#43;0800</pubDate>
+  <author>兴国</author>
+  <guid>http://fanxingguo.top/constructionnewdeletethis/</guid>
+  <description><![CDATA[<p>介绍 C++语言中的构造函数更多用法、空间的申请与释放：new deldte、this指针的使用</p>]]></description>
+</item><item>
   <title>C&#43;&#43; 类 和对象 构造函数、析构函数</title>
   <link>http://fanxingguo.top/cppcalss/</link>
   <pubDate>Sat, 16 Jul 2022 11:02:45 &#43;0800</pubDate>
@@ -69,28 +76,5 @@
   <guid>http://fanxingguo.top/linermodel/</guid>
   <description><![CDATA[<h3 id="一个简单的线性回归例子">一个简单的线性回归例子</h3>
 <p>下面，我们将梯度下降解决一个线性回归问题。</p>]]></description>
-</item><item>
-  <title>使用esp32cam和micropython控制小车</title>
-  <link>http://fanxingguo.top/esp32cam%E5%B0%8F%E8%BD%A6%E4%BB%A3%E7%A0%81/</link>
-  <pubDate>Tue, 17 May 2022 17:48:18 &#43;0800</pubDate>
-  <author>兴国</author>
-  <guid>http://fanxingguo.top/esp32cam%E5%B0%8F%E8%BD%A6%E4%BB%A3%E7%A0%81/</guid>
-  <description><![CDATA[<h3 id="功能描述">功能描述</h3>
-<p>手机搜索WIFI，加入camera_1，密码，浏览器访问一下链接</p>
-<ul>
-<li>
-<p>192.168.4.1 查看实时拍照</p>
-</li>
-<li>
-<p>192.168.4.1/left  控制左转</p>
-</li>
-<li>
-<p>192.168.4.1/right  控制右转</p>
-</li>
-<li>
-<p>192.168.4.1/forward 控制直行</p>
-<p>单次运动时长为moveTime=0.05s，直行大约1.5cm。</p>
-</li>
-</ul>]]></description>
 </item></channel>
 </rss>

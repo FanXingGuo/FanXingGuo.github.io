@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <title>C&#43;&#43; 构造函数、new deldte、this指针 - 兴国的夏天</title><meta name="author" content="兴国: ">
+<meta name="description" content="介绍 C&#43;&#43;语言中的构造函数更多用法、空间的申请与释放：new deldte、this指针的使用" />
+<meta name="keywords" content="C&#43;&#43;,构造函数,new,delete,this,空间申请,空间释放" /><meta itemprop="name" content="C&#43;&#43; 构造函数、new deldte、this指针">
+<meta itemprop="description" content="介绍 C&#43;&#43;语言中的构造函数更多用法、空间的申请与释放：new deldte、this指针的使用"><meta itemprop="datePublished" content="2022-07-18T19:43:35+08:00" />
+<meta itemprop="dateModified" content="2022-07-18T19:43:35+08:00" />
+<meta itemprop="wordCount" content="1076"><meta itemprop="image" content="http://fanxingguo.top/avatar.jpg"/>
+<meta itemprop="keywords" content="C&#43;&#43;,构造函数,new,delete,this,空间申请,空间释放," /><meta property="og:title" content="C&#43;&#43; 构造函数、new deldte、this指针" />
+<meta property="og:description" content="介绍 C&#43;&#43;语言中的构造函数更多用法、空间的申请与释放：new deldte、this指针的使用" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://fanxingguo.top/constructionnewdeletethis/" /><meta property="og:image" content="http://fanxingguo.top/avatar.jpg"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-18T19:43:35+08:00" />
+<meta property="article:modified_time" content="2022-07-18T19:43:35+08:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="http://fanxingguo.top/avatar.jpg"/>
+
+<meta name="twitter:title" content="C&#43;&#43; 构造函数、new deldte、this指针"/>
+<meta name="twitter:description" content="介绍 C&#43;&#43;语言中的构造函数更多用法、空间的申请与释放：new deldte、this指针的使用"/>
+<meta name="application-name" content="xgBlog">
+<meta name="apple-mobile-web-app-title" content="xgBlog"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#252627"><meta name="msapplication-TileColor" content="#da532c"><link rel="icon" href="https://cdn.51dream.top/blog/icons8-%e9%a6%96%e9%a1%b5.svg"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://fanxingguo.top/constructionnewdeletethis/" /><link rel="prev" href="http://fanxingguo.top/cppcalss/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "C++ 构造函数、new deldte、this指针",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/fanxingguo.top\/constructionnewdeletethis\/"
+    },"genre": "posts","keywords": "C\u002b\u002b, 构造函数, new, delete, this, 空间申请, 空间释放","wordcount":  1076 ,
+    "url": "http:\/\/fanxingguo.top\/constructionnewdeletethis\/","datePublished": "2022-07-18T19:43:35+08:00","dateModified": "2022-07-18T19:43:35+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "兴国"
+      },"description": ""
+  }
+  </script></head>
+  <body header-desktop="sticky" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script><div class="wrapper"><header class="desktop" id="header-desktop">
+
+  
+
+  
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="兴国的夏天"><span class="header-title-pre"><i class="far fa-kiss-wink-heart fa-fw"></i></span><span class="header-title-text">兴国的夏天</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >文章</a></li><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >分类</a></li><li
+              class="menu-item"
+              
+            >
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >标签</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fas fa-adjust fa-fw"></i>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header><header class="mobile" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="兴国的夏天"><span class="header-title-pre"><i class="far fa-kiss-wink-heart fa-fw"></i></span><span class="header-title-text">兴国的夏天</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >文章</a></li><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >分类</a></li><li
+              class="menu-item"
+            ><a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >标签</a></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fas fa-adjust fa-fw"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header>
+<div class="search-dropdown desktop">
+  <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+  <div id="search-dropdown-mobile"></div>
+</div>
+<main class="container" page-style="normal"><aside class="toc" id="toc-auto"><h2 class="toc-title">目录</h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    
+  </aside>
+
+  <article class="page single"><h1 class="single-title animate__animated animate__flipInX">C&#43;&#43; 构造函数、new deldte、this指针</h1><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><img
+    class="lazyload avatar"
+    src="/svg/loading.min.svg"
+    data-src="https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg"
+    data-srcset="https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg, https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg 1.5x, https://cdn.51dream.top/blog/Cache_3811f55cdf499c5b.jpg 2x"
+    data-sizes="auto"
+    alt="兴国"
+    title="兴国" />&nbsp;兴国</span></span>
+          <span class="post-category">收录于 <a href="/categories/%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0/"><i class="far fa-folder fa-fw"></i>&nbsp;编程学习</a></span></div>
+      <div class="post-meta-line"><span title=2022-07-18&#32;19:43:35>
+            <i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-07-18" >2022-07-18</time>
+          </span>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1076 字&nbsp;
+        <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+    </div><div class="details toc" id="toc-static" kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fas fa-angle-right"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#构造函数">构造函数</a>
+      <ul>
+        <li><a href="#不同参数列表构造函数">不同参数列表构造函数</a></li>
+        <li><a href="#构造函数列表初始化">构造函数列表初始化</a></li>
+        <li><a href="#构造函数隐式调用">构造函数隐式调用</a>
+          <ul>
+            <li><a href="#关闭隐式调用">关闭隐式调用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#new和delete">new和delete</a></li>
+    <li><a href="#this指针">this指针</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>介绍 C++语言中的构造函数更多用法、空间的申请与释放：new deldte、this指针的使用</p>
+<h2 id="构造函数">构造函数</h2>
+<ul>
+<li>用于初始化对象成员属性</li>
+<li>构造函数函数名，必须与类名一致</li>
+<li>构造函数没有返回值</li>
+<li>同一个类，可以有多个参数列表不同的构造函数</li>
+<li>当且仅当类没有声明构造函数是，编译器会自动声明一个无参无内容构造函数</li>
+</ul>
+<h3 id="不同参数列表构造函数">不同参数列表构造函数</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// Student.h
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Created by 范兴国 on 2022/7/12.
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#ifndef STLLEN_STUDENT_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define STLLEN_STUDENT_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Student</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">score</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">introduce</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//Student(); 如果定义其他构造函数，此时默认构造函数不会初始化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="p">,</span><span class="kt">double</span> <span class="n">score</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">Student</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif </span><span class="c1">//STLLEN_STUDENT_H
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// Student.cpp
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Created by 范兴国 on 2022/7/12.
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;Student.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Student</span><span class="o">::</span><span class="n">introduce</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&#34;name:&#34;</span><span class="o">&lt;&lt;</span><span class="n">name</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&#34;score:&#34;</span><span class="o">&lt;&lt;</span><span class="n">score</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">Student</span><span class="o">::</span><span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">strncpy</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">Student</span><span class="o">::</span><span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="kt">double</span> <span class="n">score</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">strncpy</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="o">-&gt;</span><span class="n">score</span><span class="o">=</span><span class="n">score</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">Student</span><span class="o">::~</span><span class="n">Student</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&#34;Student::~Student()&#34;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// main.cpp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;../lib/Student.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span><span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Student</span> <span class="n">stu</span><span class="p">(</span><span class="s">&#34;Tom&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">stu</span><span class="p">.</span><span class="n">introduce</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Student</span> <span class="n">stu2</span><span class="p">(</span><span class="s">&#34;Petter&#34;</span><span class="p">,</span><span class="mi">88</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">stu2</span><span class="p">.</span><span class="n">introduce</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*输出：
+</span></span></span><span class="line"><span class="cl"><span class="cm">name:Tom
+</span></span></span><span class="line"><span class="cl"><span class="cm">score:6.95313e-310
+</span></span></span><span class="line"><span class="cl"><span class="cm">name:Petter
+</span></span></span><span class="line"><span class="cl"><span class="cm">score:88
+</span></span></span><span class="line"><span class="cl"><span class="cm">Student::~Student()
+</span></span></span><span class="line"><span class="cl"><span class="cm">Student::~Student()
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="构造函数列表初始化">构造函数列表初始化</h3>
+<p>只支持参数通过赋值运算符赋值给成员。</p>
+<p>初始化成员的顺序必须与类成员顺序一致。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// Student.h
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Created by 范兴国 on 2022/7/12.
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#ifndef STLLEN_STUDENT_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define STLLEN_STUDENT_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Student</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">score</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">age</span><span class="p">;</span> <span class="c1">//添加age
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">void</span> <span class="nf">introduce</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="p">,</span><span class="kt">double</span> <span class="n">score</span><span class="p">,</span><span class="kt">int</span> <span class="n">age</span><span class="p">);</span> <span class="c1">// 添加age
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="o">~</span><span class="n">Student</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif </span><span class="c1">//STLLEN_STUDENT_H
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// Student.cpp
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Created by 范兴国 on 2022/7/12.
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&#34;Student.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">Student</span><span class="o">::</span><span class="n">introduce</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&#34;name:&#34;</span><span class="o">&lt;&lt;</span><span class="n">name</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&#34;score:&#34;</span><span class="o">&lt;&lt;</span><span class="n">score</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&#34;age:&#34;</span><span class="o">&lt;&lt;</span><span class="n">age</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">Student</span><span class="o">::</span><span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">strncpy</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">Student</span><span class="o">::</span><span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="kt">double</span> <span class="n">score</span><span class="p">,</span><span class="kt">int</span> <span class="n">age</span><span class="p">)</span> <span class="o">:</span><span class="n">score</span><span class="p">(</span><span class="n">score</span><span class="p">),</span><span class="n">age</span><span class="p">(</span><span class="n">age</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">strncpy</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span> <span class="c1">// name 不能直接赋值，因此不能列表初始化
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">Student</span><span class="o">::~</span><span class="n">Student</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&#34;Student::~Student()&#34;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// main.cpp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;../lib/Student.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span><span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">Student</span> <span class="n">stu2</span><span class="p">(</span><span class="s">&#34;Petter&#34;</span><span class="p">,</span><span class="mi">88</span><span class="p">,</span><span class="mi">24</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">stu2</span><span class="p">.</span><span class="n">introduce</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/*输出：
+</span></span></span><span class="line"><span class="cl"><span class="cm">name:Petter
+</span></span></span><span class="line"><span class="cl"><span class="cm">score:88
+</span></span></span><span class="line"><span class="cl"><span class="cm">age:24
+</span></span></span><span class="line"><span class="cl"><span class="cm">Student::~Student()
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="构造函数隐式调用">构造函数隐式调用</h3>
+<p>当构造函数只有一个参数时候，就可能出现构造函数隐式调用。</p>
+<p>在构造函数声明前加上explicit关键字可以关闭构造函数隐式调用功能。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// main.cpp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;../lib/Student.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span><span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Student</span> <span class="n">tom</span><span class="o">=</span><span class="s">&#34;Tom&#34;</span><span class="p">;</span><span class="c1">//等价于：Student tom(&#34;Tom&#34;);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">tom</span><span class="p">.</span><span class="n">introduce</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/*输出：
+</span></span></span><span class="line"><span class="cl"><span class="cm">name:Tom
+</span></span></span><span class="line"><span class="cl"><span class="cm">score:0
+</span></span></span><span class="line"><span class="cl"><span class="cm">age:-287104112
+</span></span></span><span class="line"><span class="cl"><span class="cm">Student::~Student()
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="关闭隐式调用">关闭隐式调用</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Created by 范兴国 on 2022/7/12.
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#ifndef STLLEN_STUDENT_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define STLLEN_STUDENT_H
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Student</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">score</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">introduce</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">explicit</span> <span class="nf">Student</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="p">);</span> <span class="c1">// 关闭隐式调用
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">name</span><span class="p">,</span><span class="kt">double</span> <span class="n">score</span><span class="p">,</span><span class="kt">int</span> <span class="n">age</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">~</span><span class="n">Student</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif </span><span class="c1">//STLLEN_STUDENT_H
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="new和delete">new和delete</h2>
+<p>C++两个关键字，用于向堆申请或释放空间，期间会调用构造/析构函数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;../lib/Student.h&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span><span class="kt">char</span> <span class="o">**</span> <span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 创建和销毁单个对象
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Student</span> <span class="o">*</span><span class="n">student</span><span class="o">=</span><span class="k">new</span> <span class="n">Student</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">delete</span> <span class="n">student</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//创建和销毁多个对象
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">Student</span> <span class="o">*</span><span class="n">students</span><span class="o">=</span><span class="k">new</span> <span class="n">Student</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span><span class="c1">// 此时会调用无参构造函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">delete</span> <span class="p">[]</span><span class="n">students</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="this指针">this指针</h2>
+<p>在对象调用成员函数时，会额外将本身地址传递给成员函数。在函数体内部，可以通过this指针，获取到编译器隐式传入当前对象的地址，并访问对象的成员。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">Student</span><span class="o">::</span><span class="n">Student</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="kt">double</span> <span class="n">score</span><span class="p">,</span><span class="kt">int</span> <span class="n">age</span><span class="p">)</span> <span class="o">:</span><span class="n">score</span><span class="p">(</span><span class="n">score</span><span class="p">),</span><span class="n">age</span><span class="p">(</span><span class="n">age</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 使用this 区分 类成员变量和参数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">strncpy</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title=2022-07-18&#32;19:43:35>更新于 2022-07-18</span>
+      </div>
+      <div class="post-info-license"></div>
+    </div>
+    <div class="post-info-line">
+      <div class="post-info-md"></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://fanxingguo.top/constructionnewdeletethis/" data-title="C&#43;&#43; 构造函数、new deldte、this指针" data-hashtags="C&#43;&#43;,构造函数,new,delete,this,空间申请,空间释放"><i class="fab fa-twitter fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://fanxingguo.top/constructionnewdeletethis/" data-hashtag="C&#43;&#43;"><i class="fab fa-facebook-square fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://fanxingguo.top/constructionnewdeletethis/" data-title="C&#43;&#43; 构造函数、new deldte、this指针" data-web><i class="fab fa-whatsapp fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://fanxingguo.top/constructionnewdeletethis/" data-title="C&#43;&#43; 构造函数、new deldte、this指针"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://fanxingguo.top/constructionnewdeletethis/" data-title="C&#43;&#43; 构造函数、new deldte、this指针"><i class="fab fa-weibo fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://fanxingguo.top/constructionnewdeletethis/" data-title="C&#43;&#43; 构造函数、new deldte、this指针" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://fanxingguo.top/constructionnewdeletethis/" data-title="C&#43;&#43; 构造函数、new deldte、this指针" data-description=""><i class="fab fa-blogger fa-fw"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://fanxingguo.top/constructionnewdeletethis/" data-title="C&#43;&#43; 构造函数、new deldte、this指针"><i class="fab fa-evernote fa-fw"></i></a>
+  </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/c&#43;&#43;/">C&#43;&#43;</a>,&nbsp;<a href="/tags/%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">构造函数</a>,&nbsp;<a href="/tags/new/">new</a>,&nbsp;<a href="/tags/delete/">delete</a>,&nbsp;<a href="/tags/this/">this</a>,&nbsp;<a href="/tags/%E7%A9%BA%E9%97%B4%E7%94%B3%E8%AF%B7/">空间申请</a>,&nbsp;<a href="/tags/%E7%A9%BA%E9%97%B4%E9%87%8A%E6%94%BE/">空间释放</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/cppcalss/" class="prev" rel="prev" title="C&#43;&#43; 类 和对象 构造函数、析构函数"><i class="fas fa-angle-left fa-fw"></i>C&#43;&#43; 类 和对象 构造函数、析构函数</a></div>
+</div>
+</article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright"><i class="far fa-copyright fa-fw"></i>
+            <span itemprop="copyrightYear">2022</span><span class="author" itemprop="copyrightHolder">
+              <a
+  href="/"
+  
+  
+  
+  
+  
+  
+>兴国</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics"></div><div class="footer-line ibruce">
+          <span id="busuanzi_container_site_uv" title='总访客数'><i class="far fa-user fa-fw"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin fa-fw"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='总访问量'><i class="far fa-eye fa-fw"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin fa-fw"></i></span></span>
+        </div><div class="footer-line beian"><span class="gov">37030502000740</span><span class="icp footer-divider">鲁ICP备20000963号-3</span></div></div>
+
+
+
+  </footer></div><div class="widgets">
+  <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+      <i class="fas fa-arrow-up fa-fw"></i>
+    </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+      <i class="fas fa-comment fa-fw"></i>
+    </a>
+  </div><div id="mask"></div>
+</div><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js" async defer></script><script type="text/javascript" src="/lib/sharer/sharer.min.js" async defer></script><script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":30},"comment":{},"enablePWA":true};</script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="/js/_custom.min.js" defer></script><script type="text/javascript">
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-45175394-1', { 'anonymize_ip': true });
+    </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=UA-45175394-1" async></script></body>
+</html>
